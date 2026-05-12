@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MWILA KAPAYA | Cyber Security Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+scroll-behavior:smooth;
+}
+
+:root{
+--bg:#050816;
+--card:rgba(11,16,32,.72);
+--purple:#7c3aed;
+--cyan:#00d4ff;
+--white:#eef2ff;
+--green:#00ff9d;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:
+radial-gradient(circle at top left,#13203b 0%,transparent 30%),
+radial-gradient(circle at bottom right,#3b0764 0%,transparent 30%),
+linear-gradient(135deg,#020617,#000000 60%,#050816);
+min-height:100vh;
+overflow-x:hidden;
+color:white;
+position:relative;
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar{
+width:10px;
+}
+
+::-webkit-scrollbar-track{
+background:#020617;
+}
+
+::-webkit-scrollbar-thumb{
+background:linear-gradient(#7c3aed,#00d4ff);
+border-radius:20px;
+}
+
+/* BACKGROUND */
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at 20% 20%, rgba(0,212,255,.14), transparent 20%),
+radial-gradient(circle at 80% 30%, rgba(124,58,237,.18), transparent 20%),
+url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2200&auto=format&fit=crop') center/cover;
+opacity:.13;
+z-index:-5;
+animation:bgMove 20s infinite alternate ease-in-out;
+}
+
+@keyframes bgMove{
+from{
+transform:scale(1);
+}
+to{
+transform:scale(1.08);
+}
+}
+
+/* MATRIX */
+
+#matrix{
+position:fixed;
+inset:0;
+z-index:-6;
+opacity:.18;
+}
+
+/* HOLOGRAM */
+
+.holo{
+position:fixed;
+inset:0;
+background:
+repeating-linear-gradient(
+90deg,
+rgba(0,212,255,.02),
+rgba(0,212,255,.02) 2px,
+transparent 2px,
+transparent 80px
+);
+animation:holo 15s linear infinite;
+z-index:-4;
+pointer-events:none;
+}
+
+@keyframes holo{
+from{
+transform:translateX(0);
+}
+to{
+transform:translateX(120px);
+}
+}
+
+/* FLOATING SHAPES */
+
+.cyber-shape{
+position:fixed;
+border:1px solid rgba(0,212,255,.15);
+background:rgba(255,255,255,.02);
+backdrop-filter:blur(10px);
+box-shadow:0 0 40px rgba(124,58,237,.2);
+animation:float 10s infinite ease-in-out;
+z-index:-3;
+}
+
+.s1{
+width:240px;
+height:240px;
+border-radius:30px;
+top:5%;
+left:3%;
+}
+
+.s2{
+width:180px;
+height:180px;
+border-radius:50%;
+right:5%;
+top:20%;
+}
+
+.s3{
+width:260px;
+height:260px;
+border-radius:40px;
+bottom:5%;
+left:35%;
+}
+
+@keyframes float{
+0%{
+transform:translateY(0px) rotate(0deg);
+}
+50%{
+transform:translateY(-25px) rotate(8deg);
+}
+100%{
+transform:translateY(0px) rotate(0deg);
+}
+}
+
+/* LAYOUT */
+
+.container{
+max-width:1450px;
+margin:auto;
+padding:25px;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:20px;
+padding:20px;
+background:rgba(7,10,25,.72);
+border:1px solid rgba(124,58,237,.3);
+border-radius:30px;
+backdrop-filter:blur(18px);
+margin-bottom:25px;
+
+box-shadow:
+0 0 20px rgba(124,58,237,.12),
+0 0 50px rgba(0,212,255,.05);
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.logo img{
+width:60px;
+height:60px;
+border-radius:18px;
+background:white;
+padding:5px;
+}
+
+.logo h1{
+font-size:1.4rem;
+background:linear-gradient(135deg,#fff,#00d4ff,#c084fc);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+.clock{
+font-size:.95rem;
+padding:10px 16px;
+background:rgba(255,255,255,.04);
+border-radius:14px;
+border:1px solid rgba(255,255,255,.05);
+backdrop-filter:blur(10px);
+box-shadow:0 0 20px rgba(0,212,255,.08);
+}
+
+.nav-buttons{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.nav-btn{
+padding:12px 20px;
+border:none;
+border-radius:50px;
+background:rgba(255,255,255,.05);
+color:white;
+cursor:pointer;
+transition:.3s;
+font-weight:600;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+background:linear-gradient(135deg,#4c1d95,#7c3aed);
+transform:translateY(-3px);
+box-shadow:0 10px 30px rgba(124,58,237,.35);
+}
+
+/* PAGES */
+
+.page{
+display:none;
+animation:fade .5s ease;
+}
+
+.page.active{
+display:block;
+}
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(15px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* GRIDS */
+
+.grid-2{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+}
+
+.grid-3{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+}
+
+@media(max-width:950px){
+
+.grid-2,
+.grid-3{
+grid-template-columns:1fr;
+}
+
+}
+
+/* CARDS */
+
+.card{
+background:var(--card);
+border:1px solid rgba(124,58,237,.2);
+border-radius:28px;
+padding:28px;
+backdrop-filter:blur(18px);
+transition:.4s;
+position:relative;
+overflow:hidden;
+
+box-shadow:
+0 10px 35px rgba(0,0,0,.35),
+0 0 20px rgba(124,58,237,.08);
+}
+
+.card::before{
+content:"";
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:2px;
+background:linear-gradient(
+90deg,
+transparent,
+#00d4ff,
+transparent
+);
+transition:.7s;
+}
+
+.card:hover::before{
+left:100%;
+}
+
+.card:hover{
+transform:translateY(-8px);
+border-color:rgba(0,212,255,.4);
+
+box-shadow:
+0 20px 50px rgba(0,0,0,.45),
+0 0 30px rgba(0,212,255,.15);
+}
+
+/* PROFILE */
+
+.profile{
+text-align:center;
+}
+
+.profile img{
+width:180px;
+height:180px;
+border-radius:50%;
+object-fit:cover;
+border:4px solid rgba(124,58,237,.7);
+box-shadow:0 0 40px rgba(124,58,237,.5);
+transition:.4s;
+}
+
+.profile img:hover{
+transform:scale(1.03);
+}
+
+/* BUTTONS */
+
+.btn{
+padding:12px 20px;
+border:none;
+border-radius:50px;
+background:linear-gradient(135deg,#4c1d95,#7c3aed);
+color:white;
+cursor:pointer;
+font-weight:600;
+transition:.3s;
+margin-top:12px;
+position:relative;
+overflow:hidden;
+}
+
+.btn::before{
+content:"";
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.25),
+transparent
+);
+transition:.6s;
+}
+
+.btn:hover::before{
+left:100%;
+}
+
+.btn:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 30px rgba(124,58,237,.35);
+}
+
+/* IMAGES */
+
+.main-img{
+width:100%;
+height:250px;
+object-fit:cover;
+border-radius:24px;
+margin-top:18px;
+transition:.4s;
+}
+
+.main-img:hover{
+transform:scale(1.02);
+}
+
+/* STATS */
+
+.stat{
+background:rgba(255,255,255,.04);
+padding:20px;
+border-radius:20px;
+margin-top:15px;
+}
+
+.number{
+font-size:3rem;
+font-weight:800;
+background:linear-gradient(135deg,#fff,#00d4ff,#c084fc);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+/* PROGRESS */
+
+.progress{
+width:100%;
+height:10px;
+background:#111827;
+border-radius:20px;
+overflow:hidden;
+margin-top:8px;
+}
+
+.progress span{
+display:block;
+height:100%;
+background:linear-gradient(90deg,#7c3aed,#00d4ff);
+
+box-shadow:
+0 0 20px rgba(0,212,255,.4);
+
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+
+0%{
+opacity:.7;
+}
+
+50%{
+opacity:1;
+}
+
+100%{
+opacity:.7;
+}
+
+}
+
+/* TERMINAL */
+
+#terminal{
+background:black;
+height:240px;
+overflow:auto;
+padding:20px;
+border-radius:20px;
+font-family:monospace;
+color:#00ff9d;
+margin-top:20px;
+
+border:1px solid rgba(0,255,157,.2);
+
+box-shadow:
+inset 0 0 30px rgba(0,255,157,.08);
+}
+
+/* TOAST */
+
+.toast{
+position:fixed;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+background:#111827;
+padding:12px 20px;
+border-radius:50px;
+z-index:9999;
+border:1px solid rgba(124,58,237,.4);
+}
+
+/* INPUTS */
+
+input{
+width:100%;
+padding:12px;
+border:none;
+border-radius:16px;
+background:#0f172a;
+color:white;
+margin-top:15px;
+outline:none;
+
+border:1px solid rgba(255,255,255,.05);
+
+transition:.3s;
+}
+
+input:focus{
+border-color:rgba(0,212,255,.4);
+
+box-shadow:
+0 0 20px rgba(0,212,255,.12);
+}
+
+/* FOOTER */
+
+footer{
+text-align:center;
+margin-top:40px;
+opacity:.6;
+padding:20px;
+}
+
+/* MOBILE NAVBAR IMPROVEMENT */
+@media (max-width: 768px) {
+.navbar {
+flex-direction: column;
+text-align: center;
+}
+.nav-buttons {
+justify-content: center;
+width: 100%;
+}
+.clock {
+width: 100%;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="holo"></div>
+
+<div class="cyber-shape s1"></div>
+<div class="cyber-shape s2"></div>
+<div class="cyber-shape s3"></div>
+
+<div class="container">
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+<div class="logo">
+<img src="https://sis.kmu.ac.zm/templates/mobile/images/header.png">
+<div>
+<h1>MWILA KAPAYA</h1>
+<p>Cyber Security Division</p>
+</div>
+</div>
+
+<div class="clock" id="clock">
+00:00:00
+</div>
+
+<div class="nav-buttons">
+
+<button class="nav-btn active" data-page="dashboard">
+<i class="fas fa-chart-line"></i> Dashboard
+</button>
+
+<button class="nav-btn" data-page="projects">
+<i class="fas fa-shield-halved"></i> Projects
+</button>
+
+<button class="nav-btn" data-page="connect">
+<i class="fas fa-paper-plane"></i> Connect
+</button>
+
+</div>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div class="page active" id="dashboard">
+
+<div class="grid-2">
+
+<div class="card profile">
+
+<img id="profileImage"
+src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop">
+
+<h2>MWILA KAPAYA</h2>
+
+<p style="margin-top:10px;color:#c4b5fd;">
+⚡ Ethical Hacker • Security Researcher
+</p>
+
+<button class="btn" id="profileLikeBtn">
+❤️ Appreciate Profile
+</button>
+
+<p id="profileLikes" style="margin-top:12px;">0 Likes</p>
+
+</div>
+
+<div class="card">
+
+<h2>
+<i class="fas fa-eye"></i>
+Cyber Intelligence Feed
+</h2>
+
+<img class="main-img"
+id="feedImage"
+src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop">
+
+<button class="btn" id="changeImageBtn">
+🖼️ Change Cyber Image
+</button>
+
+<button class="btn" id="quoteBtn">
+💡 Generate AI Quote
+</button>
+
+<p id="quoteText" style="margin-top:15px;color:#c4b5fd;">
+Cybersecurity is the art of protecting tomorrow.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>
+<i class="fas fa-chart-simple"></i>
+Performance Stats
+</h2>
+
+<div class="stat">
+<div class="number" id="labCount">18</div>
+<p>Active Labs</p>
+</div>
+
+<div class="stat">
+<div class="number" id="ctfCount">2450</div>
+<p>CTF Points</p>
+</div>
+
+<button class="btn" id="boostBtn">
+🚀 Boost Stats
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>
+<i class="fas fa-radar"></i>
+Threat Scanner
+</h2>
+
+<p style="margin-top:20px;">Malware Detection</p>
+<!-- ARIA Enhanced Progress Bar -->
+<div class="progress" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" aria-label="Malware Detection">
+<span id="malwareBar" style="width:78%"></span>
+</div>
+
+<p style="margin-top:20px;">Phishing Detection</p>
+<!-- ARIA Enhanced Progress Bar -->
+<div class="progress" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" aria-label="Phishing Detection">
+<span id="phishingBar" style="width:82%"></span>
+</div>
+
+<p style="margin-top:20px;">Network Intrusion</p>
+<!-- ARIA Enhanced Progress Bar -->
+<div class="progress" role="progressbar" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100" aria-label="Network Intrusion">
+<span id="networkBar" style="width:91%"></span>
+</div>
+
+<button class="btn" id="scanBtn">
+🛡️ Run Deep Scan
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>
+<i class="fas fa-terminal"></i>
+Live Security Console
+</h2>
+
+<div id="terminal" aria-live="polite" aria-label="Security Console Output"></div>
+
+<button class="btn" id="terminalBtn">
+⚡ Execute Scan
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>
+<i class="fas fa-list-check"></i>
+Mission Tasks
+</h2>
+
+<div id="tasks">
+
+<p class="task">🔐 Complete Penetration Test</p>
+<p class="task">🌐 Deploy Secure Server</p>
+<p class="task">🛡️ Run Vulnerability Scan</p>
+
+</div>
+
+<input type="text" id="taskInput" placeholder="Add new mission">
+
+<button class="btn" id="addTaskBtn">
+➕ Add Mission
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- PROJECTS -->
+
+<div class="page" id="projects">
+
+<div class="grid-3">
+
+<div class="card">
+
+<h2>CyberGuard AI</h2>
+
+<p style="margin-top:15px;">
+AI powered cyber defense dashboard.
+</p>
+
+<button class="btn projectBtn">
+👍 Like Project
+</button>
+
+<p class="projectLikes">0 Likes</p>
+
+</div>
+
+<div class="card">
+
+<h2>SecureNet</h2>
+
+<p style="margin-top:15px;">
+Advanced network monitoring system.
+</p>
+
+<button class="btn projectBtn">
+👍 Like Project
+</button>
+
+<p class="projectLikes">0 Likes</p>
+
+</div>
+
+<div class="card">
+
+<h2>Dark UI Framework</h2>
+
+<p style="margin-top:15px;">
+3D futuristic cybersecurity interface.
+</p>
+
+<button class="btn projectBtn">
+👍 Like Project
+</button>
+
+<p class="projectLikes">0 Likes</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- CONNECT -->
+
+<div class="page" id="connect">
+
+<div class="grid-2">
+
+<div class="card">
+
+<h2>Connect</h2>
+
+<p style="margin-top:20px;">
+📧 2003mwila@gmail.com
+</p>
+
+<p style="margin-top:10px;">
+🌐 github.com/mwila
+</p>
+
+<button class="btn" id="connectBtn">
+⭐ Strengthen Connection
+</button>
+
+<p id="connectCount" style="margin-top:15px;">
+31 Connections
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>Community Board</h2>
+
+<div id="board"
+style="
+margin-top:20px;
+height:220px;
+overflow:auto;
+background:#050816;
+padding:15px;
+border-radius:20px;
+">
+<p>✨ KMU Cyber Nexus Active ✨</p>
+</div>
+
+<input type="text" id="messageInput" placeholder="Write message">
+
+<button class="btn" id="postBtn">
+📢 Post Message
+</button>
+
+<button class="btn" id="clearBtn">
+🧹 Clear Board
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+🛡️ Kapasa Makasa University • Cyber Security Division
+</footer>
+
+</div>
+
+<script>
+
+/* DATA PERSISTENCE (LocalStorage) */
+
+const defaultState = {
+profileLikes: 0,
+labs: 18,
+ctf: 2450,
+connections: 31,
+projectLikes: [0, 0, 0],
+tasks: [
+"🔐 Complete Penetration Test",
+"🌐 Deploy Secure Server",
+"🛡️ Run Vulnerability Scan"
+],
+messages: ["✨ KMU Cyber Nexus Active ✨"]
+};
+
+// Load state or use default
+let state = JSON.parse(localStorage.getItem('cyberDashboardState')) || defaultState;
+
+function saveState() {
+localStorage.setItem('cyberDashboardState', JSON.stringify(state));
+}
+
+/* LIVE CLOCK */
+
+function updateClock(){
+const now=new Date();
+document.getElementById("clock").innerText=now.toLocaleTimeString();
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+/* MATRIX ANIMATION (Optimized with requestAnimationFrame & Resize) */
+
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+
+let matrixColumns;
+let drops = [];
+
+function initMatrix() {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+matrixColumns = canvas.width / 16; // size is 16
+
+// Initialize drops
+drops = [];
+for(let x=0; x<matrixColumns; x++){
+drops[x]=1;
+}
+}
+
+// Initialize on load
+initMatrix();
+
+// Handle resize
+window.addEventListener('resize', initMatrix);
+
+const letters="01";
+const size=16;
+
+let lastTime = 0;
+const fps = 30; // Limit FPS for performance
+const interval = 1000/fps;
+
+function drawMatrix(time){
+requestAnimationFrame(drawMatrix);
+
+const delta = time - lastTime;
+if (delta < interval) return;
+
+lastTime = time - (delta % interval);
+
+ctx.fillStyle="rgba(0,0,0,.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00d4ff";
+ctx.font=size+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+
+const text=letters[Math.floor(Math.random()*letters.length)];
+
+ctx.fillText(text,i*size,drops[i]*size);
+
+if(drops[i]*size>canvas.height && Math.random()>0.975){
+drops[i]=0;
+}
+
+drops[i]++;
+}
+}
+
+requestAnimationFrame(drawMatrix);
+
+/* TOAST */
+
+function toast(message){
+const div=document.createElement("div");
+div.className="toast";
+div.innerText=message;
+document.body.appendChild(div);
+setTimeout(()=>{ div.remove(); },2000);
+}
+
+/* PAGE SWITCHING */
+
+const pages=document.querySelectorAll(".page");
+
+document.querySelectorAll(".nav-btn").forEach(btn=>{
+btn.addEventListener("click",()=>{
+pages.forEach(page=>{ page.classList.remove("active"); });
+document.querySelectorAll(".nav-btn").forEach(b=>{ b.classList.remove("active"); });
+document.getElementById(btn.dataset.page).classList.add("active");
+btn.classList.add("active");
+toast("📄 Switched page");
+});
+});
+
+/* RENDER SAVED DATA ON LOAD */
+
+function renderInitialState() {
+// Profile Likes
+document.getElementById("profileLikes").innerText = state.profileLikes + " Likes";
+
+// Stats
+document.getElementById("labCount").innerText = state.labs;
+document.getElementById("ctfCount").innerText = state.ctf;
+
+// Connections
+document.getElementById("connectCount").innerText = state.connections + " Connections";
+
+// Tasks
+const tasksContainer = document.getElementById("tasks");
+tasksContainer.innerHTML = ""; 
+state.tasks.forEach(task => {
+const p = document.createElement("p");
+p.className = "task";
+p.style.marginTop = "12px";
+p.textContent = task; // Security: textContent
+tasksContainer.appendChild(p);
+});
+
+// Project Likes
+document.querySelectorAll(".projectLikes").forEach((el, index) => {
+el.innerText = state.projectLikes[index] + " Likes";
+});
+
+// Messages
+const board = document.getElementById("board");
+board.innerHTML = "";
+state.messages.forEach(msg => {
+const p = document.createElement("p");
+p.style.marginBottom = "10px";
+p.style.padding = "10px";
+p.style.background = "rgba(124,58,237,.15)";
+p.style.borderRadius = "14px";
+p.textContent = msg; // Security: textContent
+board.prepend(p); // Prepend keeps order visually if we clear and re-render, but simpler to just append
+});
+}
+
+renderInitialState();
+
+/* IMAGE PRELOADING */
+
+const images=[
+"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop",
+"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200&auto=format&fit=crop",
+"https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1200&auto=format&fit=crop",
+"https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop"
+];
+
+// Preload images
+images.forEach(src => {
+const img = new Image();
+img.src = src;
+});
+
+let imageIndex=0;
+
+/* PROFILE LIKES */
+
+document.getElementById("profileLikeBtn").addEventListener("click",()=>{
+state.profileLikes++;
+document.getElementById("profileLikes").innerText = state.profileLikes + " Likes";
+saveState();
+toast("❤️ Profile appreciated");
+});
+
+/* IMAGE SWITCH */
+
+document.getElementById("changeImageBtn").addEventListener("click",()=>{
+imageIndex=(imageIndex+1)%images.length;
+document.getElementById("feedImage").src=images[imageIndex];
+toast("🖼️ Cyber image changed");
+});
+
+/* QUOTES */
+
+const quotes=[
+"Cybersecurity begins with awareness.",
+"Protect systems. Protect the future.",
+"Ethical hacking drives innovation.",
+"Secure coding creates secure worlds.",
+"AI and cybersecurity shape tomorrow."
+];
+
+document.getElementById("quoteBtn").addEventListener("click",()=>{
+const random=quotes[Math.floor(Math.random()*quotes.length)];
+document.getElementById("quoteText").innerText=random;
+toast("💡 Quote generated");
+});
+
+/* BOOST STATS */
+
+document.getElementById("boostBtn").addEventListener("click",()=>{
+state.labs++;
+state.ctf+=120;
+document.getElementById("labCount").innerText=state.labs;
+document.getElementById("ctfCount").innerText=state.ctf;
+saveState();
+toast("🚀 Stats boosted");
+});
+
+/* THREAT SCAN */
+
+document.getElementById("scanBtn").addEventListener("click",()=>{
+const m=Math.floor(Math.random()*20)+80;
+const p=Math.floor(Math.random()*20)+75;
+const n=Math.floor(Math.random()*15)+85;
+
+const malwareBar = document.getElementById("malwareBar");
+const phishingBar = document.getElementById("phishingBar");
+const networkBar = document.getElementById("networkBar");
+
+malwareBar.style.width=m+"%";
+phishingBar.style.width=p+"%";
+networkBar.style.width=n+"%";
+
+// Update ARIA values for accessibility
+malwareBar.parentElement.setAttribute('aria-valuenow', m);
+phishingBar.parentElement.setAttribute('aria-valuenow', p);
+networkBar.parentElement.setAttribute('aria-valuenow', n);
+
+toast("🛡️ Deep scan completed");
+});
+
+/* TERMINAL */
+
+document.getElementById("terminalBtn").addEventListener("click",()=>{
+const terminal=document.getElementById("terminal");
+terminal.innerHTML="";
+
+const logs=[
+"> Initializing security protocol...",
+"> Scanning active ports...",
+"> Firewall integrity: OK",
+"> AI threat response active...",
+"> Threat analysis completed...",
+"> Zero vulnerabilities detected."
+];
+
+let i=0;
+const interval=setInterval(()=>{
+if(i>=logs.length){
+clearInterval(interval);
+toast("⚡ Terminal scan complete");
+return;
+}
+terminal.innerHTML+=logs[i]+"<br>";
+terminal.scrollTop=terminal.scrollHeight;
+i++;
+},700);
+});
+
+/* TASKS */
+
+document.getElementById("addTaskBtn").addEventListener("click",()=>{
+const input=document.getElementById("taskInput");
+if(input.value.trim()===""){
+toast("⚠️ Enter mission");
+return;
+}
+
+const taskText = "🛡️ " + input.value;
+state.tasks.push(taskText);
+
+const p=document.createElement("p");
+p.className="task";
+p.style.marginTop="12px";
+p.textContent = taskText; // Security: textContent
+document.getElementById("tasks").appendChild(p);
+
+input.value="";
+saveState();
+toast("➕ Mission added");
+});
+
+/* PROJECT LIKES */
+
+document.querySelectorAll(".projectBtn").forEach((btn,index)=>{
+btn.addEventListener("click",()=>{
+state.projectLikes[index]++;
+document.querySelectorAll(".projectLikes")[index].innerText = state.projectLikes[index] + " Likes";
+saveState();
+toast("👍 Project liked");
+});
+});
+
+/* CONNECTIONS */
+
+document.getElementById("connectBtn").addEventListener("click",()=>{
+state.connections++;
+document.getElementById("connectCount").innerText = state.connections + " Connections";
+saveState();
+toast("⭐ Connection strengthened");
+});
+
+/* BOARD */
+
+document.getElementById("postBtn").addEventListener("click",()=>{
+const input=document.getElementById("messageInput");
+if(input.value.trim()===""){
+toast("⚠️ Enter message");
+return;
+}
+
+const msgContent = "💬 " + input.value;
+state.messages.push(msgContent);
+
+const div=document.createElement("div");
+div.style.marginBottom="10px";
+div.style.padding="10px";
+div.style.background="rgba(124,58,237,.15)";
+div.style.borderRadius="14px";
+
+// Security Fix: Use textContent to prevent XSS
+div.textContent = msgContent;
+
+document.getElementById("board").prepend(div);
+
+input.value="";
+saveState();
+toast("📢 Message posted");
+});
+
+/* CLEAR BOARD */
+
+document.getElementById("clearBtn").addEventListener("click",()=>{
+state.messages = ["✨ Board cleared ✨"];
+saveState();
+document.getElementById("board").innerHTML="<p>✨ Board cleared ✨</p>";
+toast("🧹 Board cleared");
+});
+
+</script>
+
+</body>
+</html>
+<!-- WELCOME SCREEN -->
+
+<div id="welcomeScreen" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" aria-describedby="welcomeDesc">
+
+<div class="welcome-overlay"></div>
+
+<div class="welcome-content">
+
+<div class="cyber-ring" aria-hidden="true"></div>
+
+<h1 class="welcome-title" id="welcomeTitle">
+MWILA KAPAYA
+</h1>
+
+<h2 class="welcome-subtitle">
+CYBER SECURITY DIVISION
+</h2>
+
+<p class="welcome-text" id="welcomeDesc">
+Advanced Cybersecurity • Ethical Hacking • Digital Defense
+</p>
+
+<button id="enterBtn" aria-label="Enter the secure network" tabindex="0">
+ENTER SECURE NETWORK
+</button>
+
+</div>
+
+</div>
+
+<!-- NOSCRIPT FALLBACK -->
+<noscript>
+<style>
+#welcomeScreen { display: none !important; }
+.noscript-message {
+position: fixed;
+inset: 0;
+background: linear-gradient(135deg, #020617, #000000);
+display: flex;
+justify-content: center;
+align-items: center;
+color: white;
+font-family: system-ui, sans-serif;
+text-align: center;
+padding: 20px;
+z-index: 9999999;
+}
+.noscript-message h1 { font-size: 2rem; margin-bottom: 10px; }
+</style>
+<div class="noscript-message">
+<div>
+<h1>JavaScript Required</h1>
+<p>Please enable JavaScript to access this secure portal.</p>
+</div>
+</div>
+</noscript>
+
+<style>
+
+/* WELCOME SCREEN */
+
+#welcomeScreen{
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at top left,#13203b 0%,transparent 30%),
+radial-gradient(circle at bottom right,#3b0764 0%,transparent 30%),
+linear-gradient(135deg,#020617,#000000 60%,#050816);
+
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+
+z-index:999999;
+
+transition:
+opacity 1s ease,
+visibility 1s ease;
+}
+
+/* HIDE EFFECT */
+
+#welcomeScreen.hide{
+opacity:0;
+visibility:hidden;
+pointer-events:none;
+}
+
+/* LOADING STATE */
+.welcome-overlay{
+position:absolute;
+inset:0;
+
+background-color: #0a0a0a;
+background-image:
+url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2200&auto=format&fit=crop');
+background-position: center;
+background-size: cover;
+
+opacity:.12;
+
+animation:zoomBg 12s infinite alternate ease-in-out;
+
+/* Performance optimization */
+will-change: transform;
+}
+
+.welcome-overlay.loaded {
+background-color: transparent;
+}
+
+@keyframes zoomBg{
+
+from{
+transform:scale(1);
+}
+
+to{
+transform:scale(1.08);
+}
+
+}
+
+.welcome-content{
+position:relative;
+text-align:center;
+z-index:2;
+padding:40px;
+
+animation:fadeIn 1.5s ease;
+
+/* Performance optimization */
+will-change: opacity, transform;
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(40px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+.cyber-ring{
+width:220px;
+height:220px;
+border-radius:50%;
+
+margin:auto;
+margin-bottom:35px;
+
+border:3px solid rgba(0,212,255,.5);
+
+box-shadow:
+0 0 30px rgba(0,212,255,.4),
+0 0 80px rgba(124,58,237,.4),
+inset 0 0 30px rgba(0,212,255,.3);
+
+animation:ringRotate 8s linear infinite;
+
+position:relative;
+
+/* Performance optimization */
+will-change: transform;
+}
+
+.cyber-ring::before{
+content:"";
+position:absolute;
+inset:20px;
+border-radius:50%;
+border:2px dashed rgba(255,255,255,.2);
+}
+
+@keyframes ringRotate{
+
+from{
+transform:rotate(0deg);
+}
+
+to{
+transform:rotate(360deg);
+}
+
+}
+
+.welcome-title{
+font-size:5rem;
+font-weight:900;
+letter-spacing:6px;
+
+background:
+linear-gradient(
+135deg,
+#ffffff,
+#00d4ff,
+#c084fc
+);
+
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent;
+
+text-shadow:
+0 0 20px rgba(0,212,255,.3);
+
+animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+
+from{
+filter:drop-shadow(0 0 10px rgba(0,212,255,.2));
+}
+
+to{
+filter:drop-shadow(0 0 25px rgba(124,58,237,.5));
+}
+
+}
+
+.welcome-subtitle{
+margin-top:15px;
+font-size:1.5rem;
+letter-spacing:5px;
+color:#c4b5fd;
+}
+
+.welcome-text{
+margin-top:20px;
+font-size:1.1rem;
+opacity:.85;
+letter-spacing:1px;
+}
+
+#enterBtn{
+margin-top:40px;
+padding:16px 40px;
+
+border:none;
+border-radius:60px;
+
+font-size:1rem;
+font-weight:700;
+letter-spacing:2px;
+
+cursor:pointer;
+color:white;
+
+background:
+linear-gradient(
+135deg,
+#4c1d95,
+#7c3aed,
+#00d4ff
+);
+
+transition:.4s;
+
+box-shadow:
+0 0 30px rgba(124,58,237,.35);
+
+/* Accessibility: visible focus outline */
+outline: none;
+}
+
+#enterBtn:hover{
+
+transform:
+translateY(-5px)
+scale(1.05);
+
+box-shadow:
+0 0 50px rgba(0,212,255,.45);
+}
+
+/* ACCESSIBILITY: Focus state for keyboard navigation */
+#enterBtn:focus {
+outline: 3px solid rgba(0, 212, 255, 0.8);
+outline-offset: 4px;
+box-shadow:
+0 0 30px rgba(124,58,237,.35),
+0 0 0 6px rgba(0, 212, 255, 0.3);
+}
+
+/* ACCESSIBILITY: Active state for touch/click feedback */
+#enterBtn:active {
+transform: translateY(-2px) scale(1.02);
+box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+}
+
+/* ACCESSIBILITY: Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+
+.welcome-overlay,
+.welcome-content,
+.cyber-ring,
+.welcome-title {
+animation: none !important;
+transition: opacity 0.3s ease, visibility 0.3s ease !important;
+}
+
+#enterBtn {
+transition: box-shadow 0.2s ease !important;
+}
+
+#enterBtn:hover,
+#enterBtn:active {
+transform: none !important;
+}
+
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.welcome-title{
+font-size:2.8rem;
+letter-spacing:3px;
+}
+
+.welcome-subtitle{
+font-size:1rem;
+letter-spacing:2px;
+}
+
+.cyber-ring{
+width:160px;
+height:160px;
+}
+
+.welcome-content {
+padding: 20px;
+}
+
+#enterBtn {
+padding: 14px 30px;
+font-size: 0.9rem;
+}
+
+}
+
+</style>
+
+<script>
+
+/* FULLY WORKING WELCOME SCREEN WITH ALL ENHANCEMENTS */
+
+(function() {
+"use strict";
+
+// Wait for DOM to be fully loaded
+window.addEventListener("DOMContentLoaded", () => {
+
+try {
+// Get elements with null checks
+const enterBtn = document.getElementById("enterBtn");
+const welcomeScreen = document.getElementById("welcomeScreen");
+const overlay = document.querySelector(".welcome-overlay");
+
+// Validate elements exist
+if (!enterBtn) {
+console.error("Welcome Screen Error: #enterBtn element not found");
+return;
+}
+
+if (!welcomeScreen) {
+console.error("Welcome Screen Error: #welcomeScreen element not found");
+return;
+}
+
+// Preload background image
+const bgUrl = "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2200&auto=format&fit=crop";
+const bgImage = new Image();
+
+bgImage.onload = function() {
+if (overlay) {
+overlay.classList.add("loaded");
+}
+};
+
+bgImage.onerror = function() {
+console.warn("Welcome Screen: Background image failed to load");
+if (overlay) {
+overlay.classList.add("loaded");
+}
+};
+
+bgImage.src = bgUrl;
+
+// Set initial focus to button for accessibility
+enterBtn.focus();
+
+// Click handler
+enterBtn.addEventListener("click", () => {
+
+// Add hide class to trigger transition
+welcomeScreen.classList.add("hide");
+
+// Manage focus: move focus away from hidden element
+// Focus will go to the main content behind the welcome screen
+setTimeout(() => {
+const mainContent = document.querySelector("main, #main, body > .content");
+if (mainContent) {
+mainContent.setAttribute("tabindex", "-1");
+mainContent.focus();
+}
+}, 1000);
+
+// Optional toast notification
+if (typeof toast === "function") {
+setTimeout(() => {
+toast("🔐 Secure access granted");
+}, 800);
+}
+
+});
+
+// Keyboard accessibility: allow Enter/Space to trigger click
+enterBtn.addEventListener("keydown", (e) => {
+if (e.key === "Enter" || e.key === " ") {
+e.preventDefault();
+enterBtn.click();
+}
+});
+
+// Trap focus within welcome screen while visible
+document.addEventListener("keydown", (e) => {
+if (e.key === "Tab" && !welcomeScreen.classList.contains("hide")) {
+e.preventDefault();
+enterBtn.focus();
+}
+});
+
+} catch (error) {
+console.error("Welcome Screen Initialization Error:", error);
+}
+
+});
+
+})();
+
+</script>
